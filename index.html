@@ -1,339 +1,679 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nike Test</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-        integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="./assets/grid.css">
-    <link rel="stylesheet" href="./assets/style.css">
-    <link rel="stylesheet" href="./assets/responsive.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bảng mạch ôn luyện — IGCSE ICT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink: #0E141C;
+    --panel: #161F2B;
+    --panel-2: #1D2836;
+    --line: #2A3644;
+    --amber: #E8A33D;
+    --amber-dim: #8C662A;
+    --teal: #4FD1AE;
+    --red: #E8685D;
+    --text: #EAEDF2;
+    --text-dim: #8C97AA;
+    --font-display: 'Space Grotesk', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--ink);
+    color:var(--text);
+    font-family:var(--font-body);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
+  }
+  a{color:var(--amber);}
+  :focus-visible{outline:2px solid var(--amber); outline-offset:3px;}
 
+  /* ---------- layout shell ---------- */
+  .wrap{max-width:920px; margin:0 auto; padding:0 24px;}
+
+  /* ---------- hero ---------- */
+  .hero{
+    padding:88px 0 64px;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size:36px 36px;
+    opacity:0.18;
+    mask-image:radial-gradient(ellipse 70% 60% at 30% 20%, black 30%, transparent 75%);
+  }
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:12.5px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--amber);
+    display:flex; align-items:center; gap:10px;
+    position:relative; z-index:1;
+  }
+  .eyebrow::before{
+    content:"";
+    width:7px; height:7px; border-radius:50%;
+    background:var(--teal);
+    box-shadow:0 0 0 4px rgba(79,209,174,0.15);
+  }
+  .hero h1{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:clamp(32px, 5vw, 48px);
+    line-height:1.1;
+    margin:18px 0 14px;
+    max-width:15ch;
+    position:relative; z-index:1;
+  }
+  .hero h1 span{color:var(--amber);}
+  .hero p{
+    color:var(--text-dim);
+    font-size:16.5px;
+    max-width:52ch;
+    margin:0;
+    position:relative; z-index:1;
+  }
+  .hero-stats{
+    display:flex; gap:28px; margin-top:32px; flex-wrap:wrap;
+    position:relative; z-index:1;
+  }
+  .hero-stat b{
+    font-family:var(--font-mono); font-size:22px; color:var(--text); display:block;
+  }
+  .hero-stat span{font-size:12.5px; color:var(--text-dim);}
+
+  /* ---------- circuit spine ---------- */
+  .spine-track{position:relative;}
+  .spine-track::before{
+    content:"";
+    position:absolute;
+    left:22px; top:0; bottom:0; width:2px;
+    background:repeating-linear-gradient(180deg, var(--line) 0 6px, transparent 6px 12px);
+  }
+  @media (max-width:640px){ .spine-track::before{left:14px;} }
+
+  .module{
+    position:relative;
+    padding:40px 0 40px 64px;
+  }
+  @media (max-width:640px){ .module{padding-left:44px;} }
+  .module-node{
+    position:absolute; left:0; top:44px;
+    width:46px; height:46px; border-radius:50%;
+    background:var(--panel);
+    border:2px solid var(--amber-dim);
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--font-mono); font-weight:700; font-size:14px;
+    color:var(--amber);
+    box-shadow:0 0 0 5px var(--ink);
+  }
+  @media (max-width:640px){ .module-node{width:32px; height:32px; font-size:11px; left:-2px;} }
+
+  .module-head{margin-bottom:18px;}
+  .module-kicker{
+    font-family:var(--font-mono); font-size:11.5px; letter-spacing:0.1em;
+    text-transform:uppercase; color:var(--text-dim);
+  }
+  .module h2{
+    font-family:var(--font-display); font-size:24px; margin:4px 0 8px; font-weight:600;
+  }
+  .module p.desc{color:var(--text-dim); font-size:14.5px; max-width:60ch; margin:0;}
+
+  .card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:22px;
+    margin-top:18px;
+  }
+
+  /* ---------- generic bits ---------- */
+  .btn{
+    font-family:var(--font-body); font-weight:600; font-size:14px;
+    background:var(--amber); color:#1A1200;
+    border:none; border-radius:7px; padding:10px 18px;
+    cursor:pointer;
+  }
+  .btn:hover{filter:brightness(1.08);}
+  .btn.secondary{background:transparent; color:var(--text); border:1px solid var(--line);}
+  .pill{
+    display:inline-flex; align-items:center; gap:6px;
+    font-family:var(--font-mono); font-size:12px;
+    padding:4px 10px; border-radius:20px;
+    border:1px solid var(--line); color:var(--text-dim);
+  }
+  .feedback{
+    margin-top:14px; padding:12px 14px; border-radius:8px;
+    font-size:14px; display:none;
+  }
+  .feedback.show{display:block;}
+  .feedback.ok{background:rgba(79,209,174,0.1); border:1px solid var(--teal); color:var(--teal);}
+  .feedback.bad{background:rgba(232,104,93,0.1); border:1px solid var(--red); color:var(--red);}
+
+  /* ---------- 1. speed round ---------- */
+  .sr-timerbar{height:6px; background:var(--panel-2); border-radius:3px; overflow:hidden; margin-bottom:18px;}
+  .sr-timerfill{height:100%; width:100%; background:var(--amber); transition:width 0.1s linear;}
+  .sr-q{font-size:16px; margin-bottom:16px;}
+  .sr-options{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+  @media (max-width:480px){ .sr-options{grid-template-columns:1fr;} }
+  .sr-opt{
+    background:var(--panel-2); border:1px solid var(--line); color:var(--text);
+    border-radius:8px; padding:12px 14px; text-align:left; cursor:pointer; font-size:14px;
+    font-family:var(--font-body);
+  }
+  .sr-opt:hover{border-color:var(--amber-dim);}
+  .sr-opt.correct{border-color:var(--teal); background:rgba(79,209,174,0.12);}
+  .sr-opt.wrong{border-color:var(--red); background:rgba(232,104,93,0.12);}
+  .sr-score{font-family:var(--font-mono); font-size:13px; color:var(--text-dim); margin-top:14px;}
+
+  /* ---------- 2. formula builder ---------- */
+  .fb-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:6px; overflow:hidden; font-family:var(--font-mono); font-size:13px; margin-bottom:16px;}
+  .fb-cell{background:var(--panel-2); padding:8px 10px;}
+  .fb-cell.head{color:var(--amber); font-weight:700; background:var(--panel);}
+  .fb-cell.active{outline:2px solid var(--amber); outline-offset:-2px;}
+  .fb-input-row{display:flex; gap:10px; flex-wrap:wrap; align-items:center;}
+  .fb-input-row input{
+    flex:1; min-width:220px;
+    background:var(--ink); border:1px solid var(--line); border-radius:7px;
+    color:var(--text); font-family:var(--font-mono); font-size:14px; padding:10px 12px;
+  }
+  .fb-input-row input:focus{border-color:var(--amber);}
+  .fb-hint{font-size:13px; color:var(--text-dim); margin-top:10px;}
+  .fb-hint button{background:none; border:none; color:var(--amber); text-decoration:underline; cursor:pointer; font-size:13px; padding:0;}
+
+  /* ---------- 3. query puzzle ---------- */
+  .qp-controls{display:flex; gap:12px; flex-wrap:wrap; margin-bottom:16px;}
+  .qp-controls select{
+    background:var(--panel-2); color:var(--text); border:1px solid var(--line);
+    border-radius:7px; padding:9px 12px; font-family:var(--font-body); font-size:13.5px;
+  }
+  .qp-table{width:100%; border-collapse:collapse; font-family:var(--font-mono); font-size:13px;}
+  .qp-table th, .qp-table td{border-bottom:1px solid var(--line); padding:8px 10px; text-align:left;}
+  .qp-table th{color:var(--amber); font-weight:700;}
+  .qp-table tbody tr.dim{opacity:0.25;}
+
+  /* ---------- 4. bug hunt ---------- */
+  .doc-mock{
+    background:#F4F1EA; color:#26241E; border-radius:6px; padding:26px 30px;
+    font-family:'Times New Roman', serif; position:relative;
+  }
+  .doc-mock h3{margin-top:0; font-size:15px; letter-spacing:0.03em;}
+  .doc-mock .spot{cursor:pointer; border-bottom:2px dotted transparent; padding:1px 2px;}
+  .doc-mock .spot.found-ok{background:rgba(79,209,174,0.35); border-bottom-color:#1a8a6c;}
+  .doc-mock .spot.found-bad{background:rgba(232,104,93,0.35);}
+  .bh-counter{font-family:var(--font-mono); font-size:13px; color:var(--text-dim); margin-top:14px;}
+
+  /* ---------- 5. skill tree ---------- */
+  .tree{display:flex; gap:16px; flex-wrap:wrap;}
+  .node-card{
+    flex:1; min-width:140px;
+    background:var(--panel-2); border:1px solid var(--line); border-radius:9px;
+    padding:16px; text-align:center; cursor:pointer; position:relative;
+  }
+  .node-card.locked{opacity:0.4; cursor:not-allowed;}
+  .node-card .icon{font-size:22px; margin-bottom:8px; display:block;}
+  .node-card .label{font-size:13px; font-weight:600;}
+  .node-card .xp{font-family:var(--font-mono); font-size:11px; color:var(--text-dim); margin-top:6px;}
+  .node-card.done{border-color:var(--teal);}
+  .node-card.done::after{content:"✓"; position:absolute; top:8px; right:10px; color:var(--teal); font-weight:700;}
+
+  /* ---------- 6. flowchart builder ---------- */
+  .flow-wrap{display:flex; flex-direction:column; align-items:center;}
+  .flow-item{
+    width:280px; max-width:100%; text-align:center; padding:12px 18px;
+    font-family:var(--font-mono); font-size:13px; cursor:grab;
+    background:var(--panel-2); border:1.5px solid var(--line); color:var(--text);
+    user-select:none;
+  }
+  .flow-item.oval{border-radius:999px;}
+  .flow-item.parallelogram{transform:skewX(-10deg);}
+  .flow-item.parallelogram > span{display:inline-block; transform:skewX(10deg);}
+  .flow-item.rect{border-radius:4px;}
+  .flow-item.diamond{transform:rotate(0deg); border-radius:4px; font-size:12.5px;}
+  .flow-item.dragging{opacity:0.35;}
+  .flow-item.correct-pos{border-color:var(--teal);}
+  .flow-item.wrong-pos{border-color:var(--red);}
+  .flow-connector{width:2px; height:16px; background:var(--line);}
+  .flow-hint{font-size:12.5px; color:var(--text-dim); margin-bottom:14px; font-family:var(--font-mono);}
+
+  /* ---------- 7. pseudocode completion ---------- */
+  .pseudo-code{
+    background:#0B1017; border:1px solid var(--line); border-radius:8px;
+    padding:20px 22px; font-family:var(--font-mono); font-size:13.5px; line-height:2.1;
+    overflow-x:auto;
+  }
+  .pseudo-code .indent{padding-left:28px;}
+  .pseudo-code select, .pseudo-code input.pc-inline{
+    background:var(--panel-2); border:1px solid var(--amber-dim); color:var(--amber);
+    font-family:var(--font-mono); font-size:13px; border-radius:4px; padding:2px 8px;
+    margin:0 2px;
+  }
+  .pseudo-code select.correct, .pseudo-code input.pc-inline.correct{border-color:var(--teal); color:var(--teal);}
+  .pseudo-code select.wrong, .pseudo-code input.pc-inline.wrong{border-color:var(--red); color:var(--red);}
+
+  /* ---------- 8. trace table ---------- */
+  .trace-table{width:100%; border-collapse:collapse; font-family:var(--font-mono); font-size:13px;}
+  .trace-table th, .trace-table td{border-bottom:1px solid var(--line); padding:9px 10px; text-align:center;}
+  .trace-table th{color:var(--amber); font-weight:700;}
+  .trace-table td.given{color:var(--text-dim);}
+  .trace-table input{
+    width:52px; background:var(--ink); border:1px solid var(--line); color:var(--text);
+    font-family:var(--font-mono); font-size:13px; padding:5px 6px; border-radius:4px; text-align:center;
+  }
+  .trace-table input.correct{border-color:var(--teal); color:var(--teal);}
+  .trace-table input.wrong{border-color:var(--red); color:var(--red);}
+  .trace-code{
+    background:#0B1017; border:1px solid var(--line); border-radius:8px;
+    padding:16px 20px; font-family:var(--font-mono); font-size:13px; line-height:1.9;
+    margin-bottom:18px; white-space:pre; overflow-x:auto;
+  }
+
+  footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:20px;}
+  footer p{color:var(--text-dim); font-size:13px; font-family:var(--font-mono);}
+</style>
 </head>
-
 <body>
-    <!-- Header -->
-    <header>
-        <div class="grid wide ">
-            <div class="header-wrap row">
-                <label for="menu-bar" class="menu-nav">
-                    <i class="fas fa-bars menu-nav__bars"></i>
-                </label>
-                <input type="checkbox" name="" class="menu__input" id="menu-bar">
-                <label for="menu-bar" class="menu-nav__overlay"></label>
-                <a href="#" class="logo l-4">Nike</a>
-                <nav class="navbar l-4 ">
-                    <a href="" class="navbar__item">Home</a>
-                    <a href="" class="navbar__item">Product</a>
-                    <a href="" class="navbar__item">Featured</a>
-                    <a href="" class="navbar__item">Review</a>
-                </nav>
-                <div class="header-icons l-4">
-                    <a href="#" class="fas fa-heart"></a>
-                    <a href="#" class="fas fa-shopping-cart"></a>
-                    <a href="#" class="fas fa-user"></a>
-                </div>
-            </div>
-        </div>
-    </header>
 
-    <!-- Slider -->
+<div class="hero wrap">
+  <div class="eyebrow">Sơ đồ mạch · IGCSE ICT gamified</div>
+  <h1>Mỗi dạng bài là một <span>module</span> trên bảng mạch ôn luyện</h1>
+  <p>Bản phác thảo tương tác 5 dạng bài tập gamification — hai nhóm lý thuyết &amp; thực hành, nối với nhau như một mạch kỹ năng. Bấm thử từng module bên dưới.</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><b>05</b><span>dạng bài mẫu</span></div>
+    <div class="hero-stat"><b>2</b><span>nhóm nội dung</span></div>
+    <div class="hero-stat"><b>100%</b><span>chấm tự động</span></div>
+  </div>
+</div>
 
-    <div class="slider">
-        <div class="grid wide slide-container active">
-            <div class="row">
-                <div class="slider__infor l-6">
-                    <span>Nike Yellow Shoes</span>
-                    <h1>Nike Metcon Shoes</h1>
-                    <p>Lorem Ipsum Dolor Sit Amet Consectetur Adipisicing Elit. Repellat Maiores Et Eos Eaque Veritatis
-                        Aut Laboriosam Earum Dolorem Iste Atque.</p>
-                    <button class="slider__btn">Add To Cart</button>
-                </div>
-                <div class="slider__img l-6">
-                    <img src="./assets/img/home-text-1.png" alt="" class="slider__img-text">
-                    <img src="./assets/img/home-shoe-1.png" alt="" class="slider__img-shoe">
-                </div>
-            </div>
-        </div>
-        <div class="grid wide slide-container">
-            <div class="row">
-                <div class="slider__infor l-6">
-                    <span>Nike Yellow Shoes</span>
-                    <h1>Nike Metcon Shoes</h1>
-                    <p>Lorem Ipsum Dolor Sit Amet Consectetur Adipisicing Elit. Repellat Maiores Et Eos Eaque Veritatis
-                        Aut Laboriosam Earum Dolorem Iste Atque.</p>
-                    <button class="slider__btn">Add To Cart</button>
-                </div>
-                <div class="slider__img l-6">
-                    <img src="./assets/img/home-text-2.png" alt="" class="slider__img-text">
-                    <img src="./assets/img/home-shoe-2.png" alt="" class="slider__img-shoe">
-                </div>
-            </div>
-        </div>
-        <div class="grid wide slide-container">
-            <div class="row">
-                <div class="slider__infor l-6">
-                    <span>Nike Yellow Shoes</span>
-                    <h1>Nike Metcon Shoes</h1>
-                    <p>Lorem Ipsum Dolor Sit Amet Consectetur Adipisicing Elit. Repellat Maiores Et Eos Eaque Veritatis
-                        Aut Laboriosam Earum Dolorem Iste Atque.</p>
-                    <button class="slider__btn">Add To Cart</button>
-                </div>
-                <div class="slider__img l-6">
-                    <img src="./assets/img/home-text-3.png" alt="" class="slider__img-text">
-                    <img src="./assets/img/home-shoe-3.png" alt="" class="slider__img-shoe">
-                </div>
-            </div>
-        </div>
-        <div id="prev" class="fas fa-chevron-left prew-next" onclick="prev()"></div>
-        <div id="next" class="fas fa-chevron-right prew-next" onclick="next()"></div>
+<div class="wrap spine-track">
+
+  <!-- MODULE 1: SPEED ROUND -->
+  <section class="module" id="m1">
+    <div class="module-node">01</div>
+    <div class="module-head">
+      <div class="module-kicker">Nhóm A · Lý thuyết</div>
+      <h2>Speed Round</h2>
+      <p class="desc">Trả lời trắc nghiệm trong thời gian giới hạn — điểm số cộng theo tốc độ, tạo cảm giác gấp gáp như ôn nước rút trước giờ thi.</p>
     </div>
+    <div class="card">
+      <div class="sr-timerbar"><div class="sr-timerfill" id="srBar"></div></div>
+      <div class="sr-q" id="srQuestion">Thiết bị nào dùng để <b>lưu trữ</b> dữ liệu lâu dài?</div>
+      <div class="sr-options" id="srOptions">
+        <button class="sr-opt" data-ok="0">RAM</button>
+        <button class="sr-opt" data-ok="1">Ổ SSD</button>
+        <button class="sr-opt" data-ok="0">Bộ xử lý (CPU)</button>
+        <button class="sr-opt" data-ok="0">Cache</button>
+      </div>
+      <div class="sr-score" id="srScore">Điểm: 0 · Nhấn một đáp án để bắt đầu</div>
+    </div>
+  </section>
 
-    <!-- Service -->
+  <!-- MODULE 2: FORMULA BUILDER -->
+  <section class="module" id="m2">
+    <div class="module-node">02</div>
+    <div class="module-head">
+      <div class="module-kicker">Nhóm B · Thực hành spreadsheet</div>
+      <h2>Formula Builder</h2>
+      <p class="desc">Không cần dựng cả Excel — chỉ một bảng mẫu và một ô công thức. Hệ thống tự tính và so khớp kết quả, gợi ý nếu sai.</p>
+    </div>
+    <div class="card">
+      <div class="fb-grid">
+        <div class="fb-cell head"></div><div class="fb-cell head">A</div><div class="fb-cell head">B</div>
+        <div class="fb-cell head">1</div><div class="fb-cell">Sản phẩm</div><div class="fb-cell">Doanh số</div>
+        <div class="fb-cell head">2</div><div class="fb-cell">Bút</div><div class="fb-cell">120</div>
+        <div class="fb-cell head">3</div><div class="fb-cell">Vở</div><div class="fb-cell">95</div>
+        <div class="fb-cell head">4</div><div class="fb-cell">Thước</div><div class="fb-cell">60</div>
+        <div class="fb-cell head">5</div><div class="fb-cell">Tổng</div><div class="fb-cell active" id="fbTarget">?</div>
+      </div>
+      <div class="fb-input-row">
+        <input type="text" id="fbInput" placeholder="Gõ công thức cho ô B5, ví dụ =SUM(B2:B4)" spellcheck="false">
+        <button class="btn" onclick="checkFormula()">Kiểm tra</button>
+      </div>
+      <div class="fb-hint">Chưa chắc chắn? <button onclick="showHint()">Xem gợi ý (-2 điểm)</button></div>
+      <div class="feedback" id="fbFeedback"></div>
+    </div>
+  </section>
 
-    <section class="service">
-        <div class="grid wide service-wrap wide-710">
-            <div class="row">
-                <div class="service__item l-4 m-6">
-                    <i class="fas fa-truck-moving"></i>
-                    <h3>Fast Delivery</h3>
-                    <p>Lorem Ipsum Dolor Sit, Amet Consectetur Adipisicing Elit. Illum, Fugit.</p>
-                </div>
-                <div class="service__item l-4 m-6">
-                    <i class="fas fa-undo"></i>
-                    <h3>10 Days Replacements</h3>
-                    <p>Lorem Ipsum Dolor Sit, Amet Consectetur Adipisicing Elit. Illum, Fugit.</p>
-                </div>
-                <div class="service__item l-4">
-                    <i class="fas fa-headset"></i>
-                    <h3>24 X 7 Support</h3>
-                    <p>Lorem Ipsum Dolor Sit, Amet Consectetur Adipisicing Elit. Illum, Fugit.</p>
-                </div>
-            </div>
+  <!-- MODULE 3: QUERY PUZZLE -->
+  <section class="module" id="m3">
+    <div class="module-node">03</div>
+    <div class="module-head">
+      <div class="module-kicker">Nhóm B · Thực hành database</div>
+      <h2>Query Puzzle</h2>
+      <p class="desc">Chọn field và điều kiện lọc qua giao diện — không cần viết SQL. Kết quả render trực tiếp thành bảng, so khớp với bảng đáp án chuẩn.</p>
+    </div>
+    <div class="card">
+      <div class="qp-controls">
+        <select id="qpField">
+          <option value="mon">Lọc theo môn</option>
+          <option value="diem">Lọc theo điểm</option>
+        </select>
+        <select id="qpCond">
+          <option value="ict">= ICT</option>
+          <option value="math">= Toán</option>
+          <option value="gt80">Điểm &gt; 80</option>
+        </select>
+        <button class="btn secondary" onclick="runQuery()">Chạy truy vấn</button>
+      </div>
+      <table class="qp-table" id="qpTable">
+        <thead><tr><th>Học sinh</th><th>Môn</th><th>Điểm</th></tr></thead>
+        <tbody id="qpBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- MODULE 4: BUG HUNT -->
+  <section class="module" id="m4">
+    <div class="module-node">04</div>
+    <div class="module-head">
+      <div class="module-kicker">Nhóm B · Thực hành document production</div>
+      <h2>Bug Hunt</h2>
+      <p class="desc">Một tài liệu có sẵn lỗi định dạng cố ý — bấm vào chỗ nghi sai để "bắt lỗi", giống trò tìm điểm khác biệt. Rèn đúng kỹ năng hay bị mất điểm oan.</p>
+    </div>
+    <div class="card">
+      <div class="doc-mock">
+        <h3 class="spot" data-bug="1" onclick="reportBug(this)">BÁO CÁO DOANH THU QUÝ III (thiếu số trang ở footer)</h3>
+        <p>Đây là bản tóm tắt <span class="spot" data-bug="0" onclick="reportBug(this)">doanh thu quý ba</span> của công ty, trình bày theo từng khu vực kinh doanh.</p>
+        <p style="font-family:'Comic Sans MS', cursive;" >
+          <span class="spot" data-bug="1" onclick="reportBug(this)">Toàn bộ đoạn này dùng sai font so với phần còn lại của tài liệu.</span>
+        </p>
+        <p><span class="spot" data-bug="0" onclick="reportBug(this)">Số liệu chi tiết được đính kèm trong phụ lục A.</span></p>
+      </div>
+      <div class="bh-counter" id="bhCounter">Đã tìm: 0 / 2 lỗi thật</div>
+    </div>
+  </section>
+
+  <!-- MODULE 5: SKILL TREE -->
+  <section class="module" id="m5">
+    <div class="module-node">05</div>
+    <div class="module-head">
+      <div class="module-kicker">Meta · Lộ trình theo syllabus</div>
+      <h2>Skill Tree</h2>
+      <p class="desc">Mỗi topic Cambridge là một node. Hoàn thành node hiện tại để mở khoá node tiếp theo — trực quan hoá lộ trình ôn thi.</p>
+    </div>
+    <div class="card">
+      <div class="tree">
+        <div class="node-card done"><span class="icon">💾</span><div class="label">Data Representation</div><div class="xp">120 XP</div></div>
+        <div class="node-card" onclick="alert('Mở bài tổng hợp Networks — Boss Level')"><span class="icon">🌐</span><div class="label">Networks</div><div class="xp">Đang mở</div></div>
+        <div class="node-card locked"><span class="icon">🔒</span><div class="label">Databases</div><div class="xp">Khoá</div></div>
+        <div class="node-card locked"><span class="icon">🔒</span><div class="label">Spreadsheets</div><div class="xp">Khoá</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODULE 6: FLOWCHART BUILDER -->
+  <section class="module" id="m6">
+    <div class="module-node">06</div>
+    <div class="module-head">
+      <div class="module-kicker">Nhóm B · Thiết kế thuật toán</div>
+      <h2>Flowchart Builder</h2>
+      <p class="desc">Các khối lưu đồ bị xáo trộn — kéo thả để sắp lại đúng trình tự xử lý. Hình khối đúng chuẩn: oval = bắt đầu/kết thúc, hình bình hành = nhập/xuất, hình chữ nhật = xử lý.</p>
+    </div>
+    <div class="card">
+      <div class="flow-hint">Bài toán: tính diện tích hình chữ nhật — kéo các khối bên dưới về đúng thứ tự</div>
+      <div class="flow-wrap" id="flowList">
+        <div class="flow-item oval" draggable="true" data-order="1">Bắt đầu</div>
+        <div class="flow-connector"></div>
+        <div class="flow-item parallelogram" draggable="true" data-order="4"><span>Xuất diện tích</span></div>
+        <div class="flow-connector"></div>
+        <div class="flow-item parallelogram" draggable="true" data-order="2"><span>Nhập chiều dài, chiều rộng</span></div>
+        <div class="flow-connector"></div>
+        <div class="flow-item rect" draggable="true" data-order="3">Diện tích ← dài × rộng</div>
+        <div class="flow-connector"></div>
+        <div class="flow-item oval" draggable="true" data-order="5">Kết thúc</div>
+      </div>
+      <div style="margin-top:16px;"><button class="btn" onclick="checkFlow()">Kiểm tra thứ tự</button></div>
+      <div class="feedback" id="flowFeedback"></div>
+    </div>
+  </section>
+
+  <!-- MODULE 7: PSEUDOCODE COMPLETION -->
+  <section class="module" id="m7">
+    <div class="module-node">07</div>
+    <div class="module-head">
+      <div class="module-kicker">Nhóm B · Pseudocode (chuẩn Cambridge)</div>
+      <h2>Pseudocode Completion</h2>
+      <p class="desc">Điền vào chỗ trống trong đoạn pseudocode — luyện đúng cú pháp và logic điều kiện theo chuẩn Cambridge, không cần gõ cả đoạn code.</p>
+    </div>
+    <div class="card">
+      <div class="pseudo-code">
+        <div>INPUT score</div>
+        <div>IF score
+          <select id="pcBlank1">
+            <option value="">— chọn —</option>
+            <option value=">=">&gt;=</option>
+            <option value="==">==</option>
+            <option value="<=">&lt;=</option>
+          </select>
+          50 THEN</div>
+        <div class="indent">OUTPUT "Pass"</div>
+        <div>
+          <select id="pcBlank2">
+            <option value="">— chọn —</option>
+            <option value="ELSE">ELSE</option>
+            <option value="ENDIF">ENDIF</option>
+            <option value="THEN">THEN</option>
+          </select>
         </div>
-    </section>
+        <div class="indent">OUTPUT "Fail"</div>
+        <div>ENDIF</div>
+      </div>
+      <div style="margin-top:16px;"><button class="btn" onclick="checkPseudo()">Kiểm tra</button></div>
+      <div class="feedback" id="pcFeedback"></div>
+    </div>
+  </section>
 
-    <!-- Product -->
+  <!-- MODULE 8: TRACE TABLE -->
+  <section class="module" id="m8">
+    <div class="module-node">08</div>
+    <div class="module-head">
+      <div class="module-kicker">Nhóm B · Trace table</div>
+      <h2>Trace Table</h2>
+      <p class="desc">Chạy tay đoạn pseudocode có vòng lặp — điền giá trị biến qua từng vòng lặp để luyện kỹ năng dò lỗi và hiểu luồng chạy chương trình.</p>
+    </div>
+    <div class="card">
+      <div class="trace-code">total ← 0
+count ← 0
+FOR i ← 1 TO 3
+    INPUT num
+    total ← total + num
+    count ← count + 1
+NEXT i
+OUTPUT total</div>
+      <table class="trace-table">
+        <thead><tr><th>i</th><th>num (nhập vào)</th><th>total</th><th>count</th></tr></thead>
+        <tbody>
+          <tr><td class="given">1</td><td class="given">5</td><td><input id="tt1t"></td><td><input id="tt1c"></td></tr>
+          <tr><td class="given">2</td><td class="given">3</td><td><input id="tt2t"></td><td><input id="tt2c"></td></tr>
+          <tr><td class="given">3</td><td class="given">8</td><td><input id="tt3t"></td><td><input id="tt3c"></td></tr>
+        </tbody>
+      </table>
+      <div style="margin-top:16px;"><button class="btn" onclick="checkTrace()">Kiểm tra trace</button></div>
+      <div class="feedback" id="ttFeedback"></div>
+    </div>
+  </section>
 
-    <section class="latest-product">
-        <div class="grid wide">
-            <h2 class="product-title">LASEST<span class="product-span"> PRODUCTS</span></h2>
-            <div class="row product-container row-4">
-                <div class="product l-3 m-6">
-                    <div class="icons">
-                        <a href="#" class="fas fa-heart"></a>
-                        <a href="#" class="fas fa-share"></a>
-                        <a href="#" class="fas fa-eye"></a>
-                    </div>
-                    <img src="./assets/img/product-1.png" alt="">
-                    <h3>Nike Shoes</h3>
-                    <p>$120.99<span>$150.99</span></p>
-                    <div class="stars">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="far fa-star"></i>
-                    </div>
-                    <button class="slider__btn">Add To Cart</button>
-                </div>
-                <div class="product l-3 m-6">
-                    <div class="icons">
-                        <a href="#" class="fas fa-heart"></a>
-                        <a href="#" class="fas fa-share"></a>
-                        <a href="#" class="fas fa-eye"></a>
-                    </div>
-                    <img src="./assets/img/product-2.png" alt="">
-                    <h3>Nike Shoes</h3>
-                    <p>$120.99<span>$150.99</span></p>
-                    <div class="stars">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="far fa-star"></i>
-                    </div>
-                    <button class="slider__btn">Add To Cart</button>
-                </div>
-                <div class="product l-3 m-6">
-                    <div class="icons">
-                        <a href="#" class="fas fa-heart"></a>
-                        <a href="#" class="fas fa-share"></a>
-                        <a href="#" class="fas fa-eye"></a>
-                    </div>
-                    <img src="./assets/img/product-3.png" alt="">
-                    <h3>Nike Shoes</h3>
-                    <p>$120.99<span>$150.99</span></p>
-                    <div class="stars">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="far fa-star"></i>
-                    </div>
-                    <button class="slider__btn">Add To Cart</button>
-                </div>
-                <div class="product l-3 m-6">
-                    <div class="icons">
-                        <a href="#" class="fas fa-heart"></a>
-                        <a href="#" class="fas fa-share"></a>
-                        <a href="#" class="fas fa-eye"></a>
-                    </div>
-                    <img src="./assets/img/product-4.png" alt="">
-                    <h3>Nike Shoes</h3>
-                    <p>$120.99<span>$150.99</span></p>
-                    <div class="stars">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="far fa-star"></i>
-                    </div>
-                    <button class="slider__btn">Add To Cart</button>
-                </div>
+</div>
 
-            </div>
-            <div class="row product-container row-2">
-                <div class="product l-6 m-6">
-                    <div class="icons">
-                        <a href="#" class="fas fa-heart"></a>
-                        <a href="#" class="fas fa-share"></a>
-                        <a href="#" class="fas fa-eye"></a>
-                    </div>
-                    <img src="./assets/img/product-5.png" alt="">
-                    <h3>Nike Shoes</h3>
-                    <p>$120.99<span>$150.99</span></p>
-                    <div class="stars">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="far fa-star"></i>
-                    </div>
-                    <button class="slider__btn">Add To Cart</button>
-                </div>
-                <div class="product l-6 m-6">
-                    <div class="icons">
-                        <a href="#" class="fas fa-heart"></a>
-                        <a href="#" class="fas fa-share"></a>
-                        <a href="#" class="fas fa-eye"></a>
-                    </div>
-                    <img src="./assets/img/product-6.png" alt="">
-                    <h3>Nike Shoes</h3>
-                    <p>$120.99<span>$150.99</span></p>
-                    <div class="stars">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="far fa-star"></i>
-                    </div>
-                    <button class="slider__btn">Add To Cart</button>
-                </div>
-            </div>
-        </div>
-    </section>
+<footer class="wrap">
+  <p>PHÁC THẢO GIAO DIỆN — không phải sản phẩm thật, dùng để trao đổi hướng thiết kế</p>
+</footer>
 
-    <section class="featured-product">
-        <div class="grid wide">
-            <h2 class="product-title">FEATURED<span class="product-span"> PRODUCTS</span></h2>
-            <div class="row featured-product__wrap">
-                <div class="img-container l-6">
-                    <div class="img-small">
-                        <img src="./assets/img/f-img-1.1.png" class="featured-image-1" alt="">
-                        <img src="./assets/img/f-img-1.2.png" class="featured-image-1" alt="">
-                        <img src="./assets/img/f-img-1.3.png" class="featured-image-1" alt="">
-                        <img src="./assets/img/f-img-1.4.png" class="featured-image-1" alt="">
-                    </div>
-                    <div class="img-large">
-                        <img class="big-image" src="./assets/img/f-img-1.1.png" alt="">
-                    </div>
-                </div>
-                <div class="content l-6">
-                    <h3>New Nike Airmax Shoes</h3>
-                    <div class="stars">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="far fa-star"></i>
-                    </div>
-                    <p>Lorem Ipsum Dolor Sit Amet Consectetur Adipisicing Elit. Dicta Facilis Praesentium Odit Voluptas
-                        Illum Iure Libero Quis Fuga Commodi. Autem.</p>
-                    <div class="price">
-                        <p>$120.99<span>$150.99</span></p>
-                    </div>
-                    <button class="slider__btn">Add To Cart</button>
-                </div>
-            </div>
-            <div class="row featured-product__wrap">
-                <div class="img-container l-6">
-                    <div class="img-small">
-                        <img src="./assets/img/f-img-2.1.png" class="featured-image-2" alt="">
-                        <img src="./assets/img/f-img-2.2.png" class="featured-image-2" alt="">
-                        <img src="./assets/img/f-img-2.3.png" class="featured-image-2" alt="">
-                        <img src="./assets/img/f-img-2.4.png" class="featured-image-2" alt="">
-                    </div>
-                    <div class="img-large">
-                        <img class="big-image-2" src="./assets/img/f-img-2.1.png" alt="">
-                    </div>
-                </div>
-                <div class="content l-6">
-                    <h3>New Nike Airmax Shoes</h3>
-                    <div class="stars">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="far fa-star"></i>
-                    </div>
-                    <p>Lorem Ipsum Dolor Sit Amet Consectetur Adipisicing Elit. Dicta Facilis Praesentium Odit Voluptas
-                        Illum Iure Libero Quis Fuga Commodi. Autem.</p>
-                    <div class="price">
-                        <p>$120.99<span>$150.99</span></p>
-                    </div>
-                    <button class="slider__btn">Add To Cart</button>
-                </div>
-            </div>
-            <div class="row featured-product__wrap">
-                <div class="img-container l-6">
-                    <div class="img-small">
-                        <img src="./assets/img/f-img-3.1.png" alt="">
-                        <img src="./assets/img/f-img-3.2.png" alt="">
-                        <img src="./assets/img/f-img-3.3.png" alt="">
-                        <img src="./assets/img/f-img-3.4.png" alt="">
-                    </div>
-                    <div class="img-large">
-                        <img src="./assets/img/f-img-3.1.png" alt="">
-                    </div>
-                </div>
-                <div class="content l-6">
-                    <h3>New Nike Airmax Shoes</h3>
-                    <div class="stars">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="far fa-star"></i>
-                    </div>
-                    <p>Lorem Ipsum Dolor Sit Amet Consectetur Adipisicing Elit. Dicta Facilis Praesentium Odit Voluptas
-                        Illum Iure Libero Quis Fuga Commodi. Autem.</p>
-                    <div class="price">
-                        <p>$120.99<span>$150.99</span></p>
-                    </div>
-                    <button class="slider__btn">Add To Cart</button>
-                </div>
-            </div>
-        </div>
-    </section>
+<script>
+  /* ---- Module 1: Speed Round ---- */
+  let srTime = 8, srScore = 0, srAnswered = false;
+  const srBar = document.getElementById('srBar');
+  const srScoreEl = document.getElementById('srScore');
+  let srInterval = setInterval(() => {
+    if (srAnswered) return;
+    srTime -= 0.1;
+    srBar.style.width = Math.max(0, (srTime/8)*100) + '%';
+    if (srTime <= 0) { srAnswered = true; srScoreEl.textContent = 'Điểm: ' + srScore + ' · Hết giờ! Tải lại trang để thử lại.'; }
+  }, 100);
+  document.getElementById('srOptions').addEventListener('click', (e) => {
+    const btn = e.target.closest('.sr-opt');
+    if (!btn || srAnswered) return;
+    srAnswered = true;
+    const isOk = btn.dataset.ok === '1';
+    document.querySelectorAll('.sr-opt').forEach(o => {
+      if (o.dataset.ok === '1') o.classList.add('correct');
+      else if (o === btn) o.classList.add('wrong');
+    });
+    const gained = isOk ? Math.max(10, Math.round(srTime*15)) : 0;
+    srScore += gained;
+    srScoreEl.textContent = isOk
+      ? 'Điểm: ' + srScore + ' · Chính xác! +' + gained + ' (trả lời nhanh = nhiều điểm hơn)'
+      : 'Điểm: ' + srScore + ' · Chưa đúng — SSD lưu trữ lâu dài, RAM chỉ tạm thời.';
+  });
 
+  /* ---- Module 2: Formula Builder ---- */
+  function normalize(s){ return s.replace(/\s+/g,'').toUpperCase(); }
+  function checkFormula(){
+    const val = normalize(document.getElementById('fbInput').value);
+    const fb = document.getElementById('fbFeedback');
+    const target = document.getElementById('fbTarget');
+    const accepted = ['=SUM(B2:B4)'];
+    fb.classList.remove('ok','bad'); fb.classList.add('show');
+    if (accepted.includes(val)) {
+      target.textContent = '275';
+      fb.classList.add('ok');
+      fb.textContent = 'Đúng rồi — =SUM(B2:B4) cho kết quả 275.';
+    } else if (val.includes('SUM')) {
+      fb.classList.add('bad');
+      fb.textContent = 'Gần đúng — bạn dùng đúng hàm SUM nhưng sai vùng dữ liệu tham chiếu. Vùng cần tính là B2 đến B4.';
+    } else {
+      fb.classList.add('bad');
+      fb.textContent = 'Chưa đúng — thử dùng hàm cộng tổng một vùng ô, ví dụ =SUM(vùng_ô).';
+    }
+  }
+  function showHint(){
+    document.getElementById('fbInput').value = '=SUM(B2:...)';
+  }
 
+  /* ---- Module 3: Query Puzzle ---- */
+  const qpData = [
+    {ten:'An', mon:'ICT', diem:88},
+    {ten:'Bình', mon:'Toán', diem:75},
+    {ten:'Chi', mon:'ICT', diem:64},
+    {ten:'Dũng', mon:'Toán', diem:91},
+    {ten:'Hà', mon:'ICT', diem:80},
+  ];
+  function renderQp(rows){
+    const body = document.getElementById('qpBody');
+    body.innerHTML = qpData.map(r => {
+      const match = rows.includes(r);
+      return `<tr class="${match ? '' : 'dim'}"><td>${r.ten}</td><td>${r.mon}</td><td>${r.diem}</td></tr>`;
+    }).join('');
+  }
+  function runQuery(){
+    const field = document.getElementById('qpField').value;
+    const cond = document.getElementById('qpCond').value;
+    let rows = qpData;
+    if (cond === 'ict') rows = qpData.filter(r => r.mon === 'ICT');
+    else if (cond === 'math') rows = qpData.filter(r => r.mon === 'Toán');
+    else if (cond === 'gt80') rows = qpData.filter(r => r.diem > 80);
+    renderQp(rows);
+  }
+  renderQp(qpData);
 
-    <script src="./scrpit.js"></script>
+  /* ---- Module 4: Bug Hunt ---- */
+  let bhFound = 0;
+  const bhTotal = 2;
+  function reportBug(el){
+    if (el.classList.contains('found-ok') || el.classList.contains('found-bad')) return;
+    const isBug = el.dataset.bug === '1';
+    el.classList.add(isBug ? 'found-ok' : 'found-bad');
+    if (isBug) bhFound++;
+  /* ---- Module 6: Flowchart Builder (drag reorder) ---- */
+  const flowList = document.getElementById('flowList');
+  let dragEl = null;
+  flowList.addEventListener('dragstart', (e) => {
+    const item = e.target.closest('.flow-item');
+    if (!item) return;
+    dragEl = item;
+    item.classList.add('dragging');
+  });
+  flowList.addEventListener('dragend', (e) => {
+    const item = e.target.closest('.flow-item');
+    if (item) item.classList.remove('dragging');
+  });
+  flowList.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    const after = [...flowList.querySelectorAll('.flow-item:not(.dragging)')].reduce((closest, child) => {
+      const box = child.getBoundingClientRect();
+      const offset = e.clientY - box.top - box.height/2;
+      if (offset < 0 && offset > closest.offset) return {offset, element: child};
+      return closest;
+    }, {offset: -Infinity, element: null}).element;
+    if (!dragEl) return;
+    if (after == null) flowList.appendChild(dragEl);
+    else flowList.insertBefore(dragEl, after);
+  });
+  function checkFlow(){
+    const items = [...flowList.querySelectorAll('.flow-item')];
+    let allOk = true;
+    items.forEach((item, idx) => {
+      item.classList.remove('correct-pos','wrong-pos');
+      const ok = Number(item.dataset.order) === idx + 1;
+      item.classList.add(ok ? 'correct-pos' : 'wrong-pos');
+      if (!ok) allOk = false;
+    });
+    const fb = document.getElementById('flowFeedback');
+    fb.classList.remove('ok','bad'); fb.classList.add('show', allOk ? 'ok' : 'bad');
+    fb.textContent = allOk
+      ? 'Chính xác — đúng trình tự: Bắt đầu → Nhập → Tính toán → Xuất → Kết thúc.'
+      : 'Chưa đúng thứ tự — các khối viền đỏ đang sai vị trí. Kéo lại và thử tiếp.';
+  }
+
+  /* ---- Module 7: Pseudocode Completion ---- */
+  function checkPseudo(){
+    const b1 = document.getElementById('pcBlank1');
+    const b2 = document.getElementById('pcBlank2');
+    const ok1 = b1.value === '>=';
+    const ok2 = b2.value === 'ELSE';
+    b1.classList.remove('correct','wrong'); b1.classList.add(ok1 ? 'correct' : 'wrong');
+    b2.classList.remove('correct','wrong'); b2.classList.add(ok2 ? 'correct' : 'wrong');
+    const fb = document.getElementById('pcFeedback');
+    fb.classList.remove('ok','bad'); fb.classList.add('show', (ok1 && ok2) ? 'ok' : 'bad');
+    fb.textContent = (ok1 && ok2)
+      ? 'Chính xác — điều kiện đỗ là score >= 50, nhánh còn lại dùng ELSE.'
+      : 'Chưa đúng hết — kiểm tra lại: điều kiện "đỗ" cần dấu so sánh nào, và từ khoá nào mở nhánh còn lại trước ENDIF?';
+  }
+
+  /* ---- Module 8: Trace Table ---- */
+  function checkTrace(){
+    const expected = {tt1t:'5', tt1c:'1', tt2t:'8', tt2c:'2', tt3t:'16', tt3c:'3'};
+    let allOk = true;
+    Object.keys(expected).forEach(id => {
+      const el = document.getElementById(id);
+      const val = el.value.trim();
+      const ok = val === expected[id];
+      el.classList.remove('correct','wrong'); el.classList.add(ok ? 'correct' : 'wrong');
+      if (!ok) allOk = false;
+    });
+    const fb = document.getElementById('ttFeedback');
+    fb.classList.remove('ok','bad'); fb.classList.add('show', allOk ? 'ok' : 'bad');
+    fb.textContent = allOk
+      ? 'Chính xác — total cộng dồn theo từng num, count tăng 1 mỗi vòng lặp. OUTPUT cuối cùng là 16.'
+      : 'Còn ô sai (viền đỏ) — nhớ: total của vòng sau = total vòng trước + num hiện tại.';
+  }
+</script>
+
 </body>
-
 </html>
